@@ -55,13 +55,35 @@ you prefer.
 
 ### Thursday
 
-* **Exercises:** 10:00-12:00
+* **Exercises:** 10:00-12:00 (see below)
 
 * **Lecture:** 13:00-15:00 (Aud 02, HCØ)
 
-* **Exercises:** 15:00-17:00
+* **Exercises:** 15:00-17:00 (see below)
 
-Exercises are held in classrooms TBA.
+## Exercise classrooms
+
+**The information in this section is tentative.**
+
+The Thursday exercise classes are held in various exciting locations around the
+world - you can go where you wish, but please exercise a bit of manual load
+balancing:
+
+### Morning
+
+- Karnapsalen, (54 pers.) Nørre Alle 53
+
+- 4-0-02, Ole Maaløes Vej 5, Biocenter
+
+- NBB 2.0.G.064/070, Jagtvej 155
+
+### Afternoon
+
+- øv - 4-0-02, Ole Maaløes Vej 5, Biocenter
+
+- øv - 4-0-13, Ole Maaløes Vej 5, Biocenter
+
+- øv - 4-0-32, Ole Maaløes Vej 5, Biocenter (no TA)
 
 ## Assignments
 
