@@ -253,19 +253,6 @@ One downside of using `assert` is that while it will tell you that the
 comparison failed, it will not tell you which result was actually
 returned.  
 
-```C
-void test_bit_and(unsigned int x, unsigned int y) {
-  unsigned int got = bit_to_int(bit_and(bit_from_int(x), bit_from_int(y)));
-  unsigned int expected = x&y;
-  if (got != expected) {
-    printf("Input:     %u & %u\n", x, y);
-    printf("Got:       %u\n", got);
-    printf("Expected:  %u\n", expected);
-    exit(1);
-  }
-}
-```
-
 
 ### Integer representation
 
