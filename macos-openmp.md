@@ -19,21 +19,21 @@ this problem is to install a proper version of GCC.
 
 This will not change the default `gcc` command.  We don't recommend
 you change it, since other Mac software might expect the default to be
-in place.  You can use the command `gcc-14` to run the installed
+in place.  You can use the command `gcc-15` to run the installed
 version of GCC.  That is, to compile a
 program, run:
 
 ```
-$ gcc-14 foo.c -o foo -fopenmp
+$ gcc-15 foo.c -o foo -fopenmp
 ```
 
 In the Makefiles for the code handout, you should change the
-definition of `CC` to be `gcc-14` instead of `gcc`. *Now* do you see
+definition of `CC` to be `gcc-15` instead of `gcc`. *Now* do you see
 the value of defining variables for this?
 
 ## If the above doesn't work
 
-First, come see TA Rasmus in room 1-0-14 (DIKU) during exercise hours.
+First, come seek out Philippe during exercise hours.
 If you want to debug your self, do the following:
 
 Make sure the X-code command line tools are installed:
@@ -42,7 +42,7 @@ Make sure the X-code command line tools are installed:
 $ xcode-select --install
 ```
 
-Then install `gcc-14` using homebrew and follow the guide above. If this 
+Then install `gcc-15` using homebrew and follow the guide above. If this 
 still doesn't work, try the following:
 
 Then prefix every build command with `xcrun`, e.g.:
@@ -52,9 +52,9 @@ $ xcrun make
 $ xcrun xcode-select --install
 ```
 
-To compile with `xcrun` + `gcc-14` you can use:
+To compile with `xcrun` + `gcc-15` you can use:
 
 ```
-$ export CC=gcc-14
+$ export CC=gcc-15
 $ xcrun make
 ```
