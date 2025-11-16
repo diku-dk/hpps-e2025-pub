@@ -117,7 +117,7 @@ following:
 
 ```
 CC?=cc
-CFLAGS?=-std=c11 -Wall -Werror -Wextra -pedantic -g
+CFLAGS?=-std=c11 -Wall -Werror -Wextra -pedantic
 ```
 
 Then when you add a program `foo`, add a rule to `Makefile` as
