@@ -199,9 +199,9 @@ a set of reusable definitions (types and functions) that can be used
 by applications.  
 
 Our library consists of a *header file* `bitvec8.h` and an *implementation file*
-`bitvec8.c`. In addition, we rely on a *test program* 'test_bitvec8'
-to test the library. The test file ¨test_bitvec8.c' uses the definitions of the header
-file and tests the correctness of their implementation.A Makefile
+`bitvec8.c`. In addition, we rely on a *test program* `test_bitvec8`
+to test the library. The test file `test_bitvec8.c` uses the definitions of the header
+file and tests the correctness of their implementation. A Makefile
 is provided to build the *test program*. They are part of the [code
 handout](handout/), but are unfinished.
 
@@ -240,7 +240,7 @@ than the testing done for the other two functions?
 #### Writing code (functions and tests)
 
 Implement the remaining 7 functions defined and specified in `bitvec8.h` using techniques
-introduced in class (week1/1b.pdf). 
+introduced in class ([1b.pdf](1b.pdf)).
 
 Implement a test function for each of these functions. Use input partitioning
 to define the test cases.
