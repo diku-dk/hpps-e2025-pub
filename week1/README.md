@@ -18,6 +18,7 @@ Thursday:
 
 ## Slides
 
+* [Tuesday (intro)](1intro.pdf)
 * [Tuesday](1a.pdf)
 * [Thursday](1b.pdf)
 
