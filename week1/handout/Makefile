@@ -7,7 +7,7 @@ roll: roll.c
 	gcc $(CFLAGS) roll.c -o roll
 
 test: test_bitvec8.c bitvec8.c bitvec8.h
-	gcc $(CFLAS) test_bitvec8.c bitvec8.c -o test_bitvec8 
+	gcc $(CFLAGS) test_bitvec8.c bitvec8.c -o test_bitvec8 
 
 clean: 
 	rm -f guess
