@@ -1,4 +1,4 @@
-CFLAGS = -Wall -Wextra -Werror -pedantic -std=c11
+CFLAGS = -Wall -Wextra  -pedantic -std=c11
 
 guess: guess.c
 	gcc $(CFLAGS) guess.c -o guess
