@@ -202,7 +202,8 @@ first five assignment.
 
 ### Date
 
-The exam date is TBA, but scheduled for week 3.
+The exam is handed out on the 12th of January at 8:00 and must be handed in by
+the 14th of January 23:00.
 
 ## Course plan
 
