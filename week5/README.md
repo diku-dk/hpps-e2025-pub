@@ -28,6 +28,9 @@
 
 * [Loop interchange](https://sid.erda.dk/share_redirect/AjdMSpVIjr/videos/6-l-1/interchange.mp4)
 
+## Slides
+
+* [Tuesday](5a.pdf)
 
 ## Exercises: parallel programming with OpenMP
 
