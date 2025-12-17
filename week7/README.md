@@ -55,11 +55,11 @@ We will support three materials. Add the following type definitions to
 
 ```C
 struct lambertian {
-  struct vec3 albedo;
+  struct vec albedo;
 };
 
 struct metal {
-  struct vec3 albedo;
+  struct vec albedo;
   double fuzz;
 };
 
@@ -190,7 +190,7 @@ Add the following definitions to `scene.h`:
 enum OBJECT_TYPE { SPHERE, XY_RECTANGLE, XZ_RECTANGLE, YZ_RECTANGLE };
 
 struct sphere {
-  struct vec3 centre;
+  struct vec centre;
   double radius;
   struct material* material;
 };
