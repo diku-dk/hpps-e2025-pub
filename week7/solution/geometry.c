@@ -56,21 +56,6 @@ struct vec vec_normalise(struct vec v) {
   return vec_scale(1/l, v);
 }
 
-struct vec random_vec() {
-  double x = rand() / (double)RAND_MAX * 2 - 1;
-  double y = rand() / (double)RAND_MAX * 2 - 1;
-  double z = rand() / (double)RAND_MAX * 2 - 1;
-  return (struct vec){.x = x, .y = y, .z = z};
-}
-
-struct vec random_in_unit_sphere() {
-  struct vec v = random_vec();
-  while (vec_quadrance(v) >= 1) {
-    v = random_vec();
-  }
-  return v;
-}
-
 struct vec point_at_parameter(struct ray r, double t) {
   return vec_add(r.origin, vec_scale(t, r.direction));
 }

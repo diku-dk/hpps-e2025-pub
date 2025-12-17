@@ -231,6 +231,37 @@ other rectangle variants are analogous.
 As before, write a small test program that creates one or more materials and one
 or more objects.
 
+Also add the following prototype to `scene.h`:
+
+```C
+struct material *object_material(struct object *o);
+```
+
+Add an implementation of `object_material()` to `scene.c`. It should return the
+material of an object.
+
+<details>
+<summary>Open this to see the solution</summary>
+
+```C
+struct material *object_material(struct object *o) {
+  switch (o->type) {
+  case SPHERE:
+    return o->sphere.material;
+  case XY_RECTANGLE:
+    return o->xy_rectangle.material;
+  case XZ_RECTANGLE:
+    return o->xz_rectangle.material;
+  case YZ_RECTANGLE:
+    return o->yz_rectangle.material;
+  default:
+    abort();
+  }
+}
+```
+
+</details>
+
 ### Describing objects
 
 Add the following prototype to `scene.h`:
@@ -317,5 +348,58 @@ void describe_object(struct object* object) {
 
 </details>
 
-You should also write a test program that uses this function. [Like this
+You should also write a test program that creates a bunch of objects and
+materials and uses this function. [Like this
 one.](solution/test_describe_object.c).
+
+## Pseudo-random numbers
+
+A ray tracer makes use of random numbers to simulate the unpredictable nature of
+light scattering of matte or metallic surfaces. Therefore we will also make use
+of a small library for generating random numbers. You are not required to
+understand the mathematics behind random number generation (it is a very deep
+field), but you should understand the programming interface. The library is
+found in [random.h](handout/random.h)/[random.c](handout/random.c)
+
+Computers are deterministic machines and cannot generate random numbers, unless
+they have access to some external sensor. Thus, we actually generate
+*pseudo*-random numbers through arithmetic using some *random number generator
+state* (RNG). In our library, the state is represented with the type `struct
+rng`. An RNG can be asked to produce a random number, during which it will also
+modify its internal state such that a (potentially) new number will be generated
+next.
+
+A fresh RNG must be initialised by passing in some *seed value*. If two RNGs are
+initialised with the same seed, then they will produce the same sequence of
+random numbers. This can be a problem, but it can also be useful, as it means we
+can reproduce the same "random" sequences multiple times, for reproducibility.
+
+In our library, we initialise the RNG state as follows:
+
+```C
+struct rng rng;
+seed_rng(&rng, 42);
+```
+
+The seed value can be any integer we wish. The important thing is that if we
+have multiple RNGs in use, they ought to have been initialised with different
+seeds.
+
+Once we have an RNG, we can generate random values using various functions. For
+example, the following function generates and returns a random non-negative
+integer with unspecified upper bound:
+
+```C
+int random_int(struct rng *rng);
+```
+
+And the following function generates a random `double` in the range `(0,1)`:
+
+```C
+double random_double(struct rng *rng);
+```
+
+Write a test program that uses the random number library to roll 10 six-sided
+dice and reports each roll.
+
+[See solution here](solution.roll_dice.c)
