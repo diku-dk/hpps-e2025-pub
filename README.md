@@ -203,7 +203,7 @@ first five assignment.
 ### Date
 
 The exam is handed out on the 12th of January at 8:00 and must be handed in by
-the 14th of January 23:00.
+the 14th of January 11:00.
 
 ## Course plan
 
