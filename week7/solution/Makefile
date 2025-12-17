@@ -1,6 +1,6 @@
 CFLAGS?=-Wall -Wextra -pedantic -g -O -lm -fsanitize=address
 CC?=cc
-EXECUTABLES=simple_test test_describe_object roll_dice
+EXECUTABLES=simple_test test_describe_object roll_dice ray
 OBJECTS=scene.o geometry.o random.o
 
 # Disable bultin rules.
@@ -15,6 +15,9 @@ test_describe_object: test_describe_object.o $(OBJECTS)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 roll_dice: roll_dice.o $(OBJECTS)
+	$(CC) -o $@ $^ $(CFLAGS)
+
+ray: ray.o $(OBJECTS)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 %.o: %.c

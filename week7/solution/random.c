@@ -14,14 +14,13 @@ void seed_rng(struct rng *rng, int seed) {
 }
 
 int random_int(struct rng *rng) {
-  rng->s = a  *rng->s + c % m;
+  rng->s = (a * rng->s + c) % m;
   return rng->s & ~(1<<31);
 }
 
 double random_double(struct rng *rng) {
   return (double)random_int(rng) / (double)m;
 }
-
 
 struct vec random_vec(struct rng *rng) {
   double x = random_double(rng) * 2 - 1;

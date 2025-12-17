@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 #include "geometry.h"
+#include "random.h"
 
 enum OBJECT_TYPE { SPHERE, XY_RECTANGLE, XZ_RECTANGLE, YZ_RECTANGLE };
 enum MATERIAL_TYPE { LAMBERTIAN, METAL, DIELECTRIC };
@@ -67,20 +68,21 @@ struct object {
   };
 };
 
-struct scene {
-  size_t num_materials;
-  struct material *materials;
-  size_t num_objects;
-  struct object *objects;
-};
+// Write textual representation of material to given file (which may be stdout).
+void describe_material(struct material*);
 
+// Write textual representation of object to given file (which may be stdout).
+void describe_object(struct object*);
+
+// A record determining the hit between a ray and an object.
 struct hit {
-  double t;
-  struct vec p;
-  struct vec normal;
-  struct material *material;
+  double t; // Distance until hit.
+  struct vec p; // Point of hit.
+  struct vec normal; // Surface normal at hit.
+  struct material *material; // Material of object.
 };
 
+// How light scatters from the material.
 struct scattering {
   struct vec attenuation;
   struct ray scattered;
@@ -89,35 +91,17 @@ struct scattering {
 // Retrieve the material of an object.
 struct material *object_material(struct object *o);
 
-bool sphere_hit(struct sphere *s, struct ray *r,
-                double t0, double t1, struct hit *out);
-
-bool xy_rectangle_hit(struct xy_rectangle *xy, struct ray *r,
-                      double t0, double t1, struct hit *out);
-
-bool xz_rectangle_hit(struct xz_rectangle *xz, struct ray *r,
-                      double t0, double t1, struct hit *out);
-
-bool yz_rectangle_hit(struct yz_rectangle *yz, struct ray *r,
-                      double t0, double t1, struct hit *out);
-
+// Find the intersection (if any) between the given object and a ray. The t0/t1
+// arguments determine a minimum and maximum distance respectively - collisions
+// outside this range are ignored. Store the result of the hit in the 'hit'
+// argument. Returns true if a hit is determined.
 bool object_hit(struct object *o, struct ray *r,
-                double t0, double t1, struct hit *out);
+                double t0, double t1, struct hit *hit);
 
-bool scattering_lambertian(struct ray *r, struct hit *h, struct scattering *out);
+// Determine whether light scatters from this hit.
+bool scattering(struct rng *rng, struct ray *r, struct hit *h, struct scattering *out);
 
-bool scattering_metal(struct ray *r, struct hit *h, struct scattering *out);
-
-bool scattering_dielectric(struct ray *r, struct hit *h, struct scattering *out);
-
-bool scattering(struct ray *r, struct hit *h, struct scattering *out);
-
-// Write textual representation of material to given file (which may be stdout).
-void describe_material(struct material*);
-
-// Write textual representation of object to given file (which may be stdout).
-void describe_object(struct object*);
-
+// Camera parameters. Do not concern yourself with the details.
 struct camera {
   struct vec origin;
   struct vec lower_left_corner;
@@ -127,9 +111,14 @@ struct camera {
   double lens_radius;
 };
 
-struct ray get_ray(struct camera* c, double s, double t);
+// Get a ray emitted from a camera.
+struct ray get_ray(struct rng *rng, struct camera* c, double s, double t);
 
-struct camera mk_camera(struct vec lookfrom, struct vec lookat, struct vec vup,
+// Construct a camera located at some point ('lookfrom') and looking at some
+// other point ('lookat'). The 'vfov', 'aspect', 'aperture', and 'focus_dist'
+// arguments determine optical properties of the camera, but are not important
+// for us.
+struct camera mk_camera(struct vec lookfrom, struct vec lookat,
                         double vfov, double aspect,
                         double aperture, double focus_dist);
 

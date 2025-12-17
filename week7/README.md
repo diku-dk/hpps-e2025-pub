@@ -1,3 +1,5 @@
+![header](irreg.png)
+
 # Ray tracing
 
 The following exercises are intended to familiarise you with [ray
@@ -403,3 +405,128 @@ Write a test program that uses the random number library to roll 10 six-sided
 dice and reports each roll.
 
 [See solution here](solution.roll_dice.c)
+
+## The rest of the owl
+
+It is now time to add the actual ray tracing logic. The details are not
+important for these exercises (or for the exam), and hence you should now use
+[scene.h](solution/scene.h)/[scene.c](solution/scene.c) from the exercise
+solutions.
+
+The two most important functions are the following:
+
+```C
+// Find the intersection (if any) between the given object and a ray. The t0/t1
+// arguments determine a minimum and maximum distance respectively - collisions
+// outside this range are ignored. Store the result of the hit in the 'hit'
+// argument. Returns true if a hit is determined.
+bool object_hit(struct object *o, struct ray *r,
+                double t0, double t1, struct hit *hit);
+
+
+// Get a ray emitted from a camera.
+struct ray get_ray(struct rng *rng, struct camera* c, double s, double t);
+```
+
+Using these, we can sketch out the ray tracing algorithm:
+
+1. Generate rays corresponding to the pixel positions in space of the image we
+   wish to generate.
+
+2. For each ray, find the closest intersecting object in the space by iterating
+   through all objects. This is quite similar to the brute-force solution of
+   *k*-NN.
+
+3. If we found a collision, compute the scattering/bounce of the ray (if any)
+   and repeat until we reach our *depth limit*, which restricts how many times
+   we allow light to bounce. For these exercises, the depth limit is rather
+   arbitrarily 5.
+
+4. If a ray escapes (does not intersect any object), compute a "horizon colour"
+   by whatever formula is appropriate. (In real ray tracers, we would have
+   explicit light-emitting objects, but for simplicity we assume a kind of
+   ambient lighting).
+
+In [ray.c](solution/ray.c), this is done by the functions `find_hit`, `colour`,
+and `render`. You do not have to implement this yourself. However, read the code
+(particularly `render`) and use it to answer the following questions. These are
+not trick questions; it is just motivation to read the code, as it is very
+likely you will be asked to make modifications during the exam. Again, *you do
+not need to understand the purpose of the code* - focus on the control flow and
+the data being accessed and modified.
+
+1. What is the asymptotic complexity of `find_hit()`?
+
+2. What is the asymptotic complexity of `colour()`?
+
+3. What is the asymptotic complexity of `render()`?
+
+<details>
+<summary>Open this to see the solution</summary>
+
+1. `find_hit()` needs to iterate through all objects. For each object, it calls
+   `object_hit()`. By rough inspection, we see that `object_hit()` must have
+   `O(1)` complexity (no loops). Therefore, the complexity of `find_hit()` is
+   `O(num_objects)`.
+
+2. In the worst case, `colour()` calls itself `max_depth` times. Each time it
+   calls `find_hit()`, `scattering()`, and some vector operations. By inspection
+   we see that `scattering()` has no loops (and neither do the vector
+   operations), hence they are constant time. Above we found that `find_hit()`
+   has complexity `O(num_objects)`. Hence the overall worst-case complexity of
+   `colour()` is `O(max_depth*num_objects)`.
+
+3. `render()` is essentially a three-deep nested loop with a total number of
+   `nx*ny*ns` iterations. The only non-constant-time computation that occurs is
+   the call to `colour()`, which we determined above to have complexity
+   *O(max_depth*num_objects)*. Hence the total complexity of `render()` (and ray
+   tracing overall) is `O(nx*ny*ns*max_depth*num_objects)`.
+
+</details>
+
+### Running the ray tracer
+
+If reading the code is not sufficient for you, you can now also run the ray
+tracer. Start by compiling it (using the [Makefile](solution/Makefile) from the
+solution):
+
+```
+$ make ray
+```
+
+Then we can run it as follows:
+
+```
+$ ./ray out.ppm 300 200 10
+```
+
+This will produce a 300x200 image with 10 rays per pixel, in the PPM image
+format. It should look like this:
+
+![out](out.png)
+
+The PPM format is very easy to generate, but not all image viewers support it.
+You can convert PPM files to a more standard format with
+[ImageMagick](https://imagemagick.org/) as follows:
+
+```
+$ magick out.ppm out.png
+```
+
+...or you can use an image viewer with PPM support. I use
+[feh](https://feh.finalrewind.org/).
+
+By default, the ray tracer generates a scene that I have titled "nice" (because
+it looks nice). To generate a different scene, pass a scene name as the fourth
+argument, e.g:
+
+```
+$ ./ray random.ppm 300 200 10 random
+```
+
+This will generate a random scene. The likelihood of these scenes looking nice
+is rather low.
+
+![random](random.png)
+
+The available scenes are `empty`, `nice`, `random`, and `irreg`.

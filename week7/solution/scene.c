@@ -6,6 +6,7 @@
 #include <math.h>
 
 #include "geometry.h"
+#include "random.h"
 #include "scene.h"
 
 struct material *object_material(struct object *o) {
@@ -142,9 +143,9 @@ bool object_hit(struct object *o, struct ray *r,
   }
 }
 
-bool scattering_lambertian(struct ray *r, struct hit *h, struct scattering *hit) {
+bool scattering_lambertian(struct rng *rng, struct ray *r, struct hit *h, struct scattering *hit) {
   (void)r;
-  struct vec bounce = random_in_unit_sphere();
+  struct vec bounce = random_in_unit_sphere(rng);
   struct vec target = vec_add(vec_add(h->p, h->normal), bounce);
   hit->attenuation = h->material->lambertian.albedo;
   hit->scattered.origin = h->p;
@@ -152,9 +153,9 @@ bool scattering_lambertian(struct ray *r, struct hit *h, struct scattering *hit)
   return true;
 }
 
-bool scattering_metal(struct ray *r, struct hit *h, struct scattering *hit) {
+bool scattering_metal(struct rng *rng, struct ray *r, struct hit *h, struct scattering *hit) {
   struct vec reflected = reflect(vec_normalise(r->direction), h->normal);
-  struct vec bounce = random_in_unit_sphere();
+  struct vec bounce = random_in_unit_sphere(rng);
   struct ray scattered =
     (struct ray){.origin = h->p,
                  .direction = vec_add(reflected,
@@ -189,7 +190,7 @@ double schlick (double cosine, double ref_idx) {
   return r0 + (1-r0)*pow((1-cosine),5);
 }
 
-bool scattering_dielectric(struct ray *r, struct hit *h, struct scattering *hit) {
+bool scattering_dielectric(struct rng *rng, struct ray *r, struct hit *h, struct scattering *hit) {
   double ref_idx = h->material->dielectric.ref_idx;
   struct vec reflected = reflect(r->direction, h->normal);
   struct vec attenuation = (struct vec) {.x = 1, .y = 1, .z = 1};
@@ -207,7 +208,7 @@ bool scattering_dielectric(struct ray *r, struct hit *h, struct scattering *hit)
   struct vec refracted;
   if (refract(r->direction, hitward_normal, ni_over_nt, &refracted)) {
     double reflect_prob = schlick(cosine, ref_idx);
-    double x = rand()/((double)RAND_MAX);
+    double x = random_double(rng);
     struct vec direction = x < reflect_prob ? reflected : refracted;
     hit->attenuation = attenuation;
     hit->scattered.origin = h->p;
@@ -221,14 +222,14 @@ bool scattering_dielectric(struct ray *r, struct hit *h, struct scattering *hit)
 }
 
 
-bool scattering(struct ray *r, struct hit *h, struct scattering *hit) {
+bool scattering(struct rng *rng, struct ray *r, struct hit *h, struct scattering *hit) {
   switch (h->material->type) {
   case LAMBERTIAN:
-    return scattering_lambertian(r, h, hit);
+    return scattering_lambertian(rng, r, h, hit);
   case METAL:
-    return scattering_metal(r, h, hit);
+    return scattering_metal(rng, r, h, hit);
   case DIELECTRIC:
-    return scattering_dielectric(r, h, hit);
+    return scattering_dielectric(rng, r, h, hit);
   default:
     abort();
   }
@@ -299,9 +300,10 @@ void describe_object(struct object* object) {
     }
 }
 
-struct camera mk_camera(struct vec lookfrom, struct vec lookat, struct vec vup,
+struct camera mk_camera(struct vec lookfrom, struct vec lookat,
                         double vfov, double aspect,
                         double aperture, double focus_dist) {
+  struct vec vup = (struct vec){0,1,0};
   double theta = vfov * M_PI / 180;
   double half_height = tan (theta / 2);
   double half_width = aspect * half_height;
@@ -324,8 +326,8 @@ struct camera mk_camera(struct vec lookfrom, struct vec lookat, struct vec vup,
 
 }
 
-struct ray get_ray(struct camera* c, double s, double t) {
-  struct vec p = random_in_unit_sphere();
+struct ray get_ray(struct rng *rng, struct camera* c, double s, double t) {
+  struct vec p = random_in_unit_sphere(rng);
   struct vec rd = vec_scale(c->lens_radius, p);
   struct vec offset = vec_add(vec_scale(rd.x, c->u), vec_scale(rd.y, c->v));
   return (struct ray){
