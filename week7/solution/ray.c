@@ -225,8 +225,8 @@ void nice_scene(struct vec *lookfrom, struct vec *lookat,
   materials[2].type = METAL;
   materials[2].metal.albedo = (struct vec) { 0, 0, 1 };
   materials[2].metal.fuzz = 0.9;
-  materials[3].type = LAMBERTIAN;
-  materials[3].lambertian.albedo = (struct vec) { 0.8, 0.8, 0.8 };
+  materials[3].type = DIELECTRIC;
+  materials[3].dielectric.ref_idx = 2;
 
   struct object *objects = calloc(*num_objects, sizeof(struct object));
 
