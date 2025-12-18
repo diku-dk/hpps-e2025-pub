@@ -122,6 +122,13 @@ struct camera mk_camera(struct vec lookfrom, struct vec lookat,
                         double vfov, double aspect,
                         double aperture, double focus_dist);
 
+// Construct a scene by name. Purely a convenience function. Returns false if a
+// scene of that name is not defined.
+bool scene_by_name(const char *name,
+                   struct vec *lookfrom, struct vec *lookat,
+                   size_t *num_materials, struct material **materials_out,
+                   size_t *num_objects, struct object **objects_out);
+
 // Encode (r,g,b) vector as RGB integer (using only three least significant
 // bytes).
 uint32_t encode_rgb(struct vec vec);
