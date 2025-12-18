@@ -32,6 +32,8 @@
 
 * [Tuesday](5a.pdf)
 
+* [Thursday](5b.pdf)
+
 ## Exercises: parallel programming with OpenMP
 
 One of the nice aspects of being a teacher is that if you find a hobby
