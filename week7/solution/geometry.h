@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 // General facilities for geometrical calculations. You do not have to
 // understand how these functions work (i.e., you do not have to read
 // geometry.c), but it can be useful to understand what they do.
@@ -64,3 +66,6 @@ struct aabb aabb_enclosing(const struct aabb *box0, const struct aabb *box1);
 
 // Find the centre of an AABB.
 struct vec aabb_centre(const struct aabb *a);
+
+// Determine whether a ray intersects an AABB.
+bool aabb_hit(struct aabb *box, struct ray *r, float tmin, float tmax);
