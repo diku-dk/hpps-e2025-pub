@@ -74,20 +74,42 @@ void render(int max_depth, int nx, int ny, int ns,
   struct rng rng;
   seed_rng(&rng, max_depth ^ nx ^ ny ^ ns);
 
-  for (int x = 0; x < nx; x++) {
-    for (int y = 0; y < ny; y++) {
-      struct vec pixel = {0,0,0};
-      for (int iter = 0; iter < ns; iter++) {
+  // We will tally up the color of each pixel in this array.
+  struct vec *rgbs = calloc(nx*ny, sizeof(struct vec));
+
+  // Zero-initialise the color vectors.
+  for (int i = 0; i < nx*ny; i++) {
+    rgbs[i] = (struct vec){0,0,0};
+  }
+
+  // We sample the image 'ns' times.
+  for (int iter = 0; iter < ns; iter++) {
+    // Loop across all pixels.
+    for (int x = 0; x < nx; x++) {
+      for (int y = 0; y < ny; y++) {
         double ud = random_double(&rng);
         double vd = random_double(&rng);
         double u = (x + ud) / nx;
         double v = (y + vd) / ny;
         struct ray r = get_ray(&rng, camera, u, v);
-        pixel = vec_add(pixel, colour(&rng, max_depth, num_objects, objects, &r));
+
+       // Accumulate in the vector for this pixel. Reverse the Y dimension
+       // because the image format coordinates assume Y goes down, while our
+       // geometrical calculations assume Y goes up. We scale the colour by the
+       // inverse of the number of samples.
+       rgbs[(ny-y-1)*nx+x] =
+         vec_add(rgbs[(ny-y-1)*nx+x],
+                 vec_scale(1.0/ns,colour(&rng, max_depth, num_objects, objects, &r)));
       }
-      out[(ny-y-1)*nx+x] = encode_rgb(vec_scale(1.0/ns,pixel));
     }
   }
+
+  // Encode as RGB integers.
+  for (int i = 0; i < nx*ny; i++) {
+    out[i] = encode_rgb(rgbs[i]);
+  }
+
+  free(rgbs);
 }
 
 void ppm_to_file(char *filename, uint32_t *pixels, int height, int width) {

@@ -6,13 +6,19 @@ The following exercises are intended to familiarise you with [ray
 tracing](https://en.wikipedia.org/wiki/Ray_tracing_(graphics)), which will be
 the computational problem you work within at the HPPS exam. A *ray tracer* is a
 program that generates an image based on a description of a 3D scene and a
-camera position within the scene. It does this by shooting *rays* from the
-camera, checking which objects these rays collide with, and using this
-information to colour the pixels of an output image. Usually many rays are fired
-for each pixel in order to get a good image. Ray tracers are interesting because
-they can produce photorealistic images by simulating the behaviour of light at a
-high fidelity. The downside is that ray tracing is very computationally
-expensive, and usually intractable for real time graphics.
+camera position within the scene. It does this by shooting rays from the camera,
+corresponding to the pixel coordinates of the output image, checking which
+objects these rays collide with, and using this information to colour the pixels
+of an output image. Usually we sample the image many times, with the rays
+randomly pertubed, in order to get good image. This is because the interaction
+between a ray of light and an object is randomised (to simulate natural
+fluctuations and matte surfaces), so we need to sample many times to get a
+proper distribution.
+
+Ray tracers are interesting because they can produce photorealistic images by
+simulating the behaviour of light at a high fidelity. The downside is that ray
+tracing is very computationally expensive, and usually intractable for real time
+graphics.
 
 The ray tracer you work on in HPPS is not particularly sophisticated, as our
 focus is on systems-level issues, rather than on computer graphics. In fact, you
@@ -440,12 +446,16 @@ Using these, we can sketch out the ray tracing algorithm:
 3. If we found a collision, compute the scattering/bounce of the ray (if any)
    and repeat until we reach our *depth limit*, which restricts how many times
    we allow light to bounce. For these exercises, the depth limit is rather
-   arbitrarily 5.
+   arbitrarily 5. Each bounce off a material contributes to the final colour,
+   based on the material.
 
 4. If a ray escapes (does not intersect any object), compute a "horizon colour"
-   by whatever formula is appropriate. (In real ray tracers, we would have
+   by whatever formula is appropriate. In real ray tracers, we would have
    explicit light-emitting objects, but for simplicity we assume a kind of
-   ambient lighting).
+   ambient lighting.
+
+5. Repeat all of this some number of times, taking the average colour of rays
+   fired for each pixel.
 
 In [ray.c](solution/ray.c), this is done by the functions `find_hit`, `colour`,
 and `render`. You do not have to implement this yourself. However, read the code
@@ -477,10 +487,10 @@ the data being accessed and modified.
    `colour()` is `O(max_depth*num_objects)`.
 
 3. `render()` is essentially a three-deep nested loop with a total number of
-   `nx*ny*ns` iterations. The only non-constant-time computation that occurs is
+   `ns*nx*ny` iterations. The only non-constant-time computation that occurs is
    the call to `colour()`, which we determined above to have complexity
    *O(max_depth*num_objects)*. Hence the total complexity of `render()` (and ray
-   tracing overall) is `O(nx*ny*ns*max_depth*num_objects)`.
+   tracing overall) is `O(ns*nx*ny*max_depth*num_objects)`.
 
 </details>
 
@@ -529,4 +539,4 @@ is rather low.
 
 ![random](random.png)
 
-The available scenes are `empty`, `nice`, `random`, and `irreg`.
+The available scenes are `empty`, `nice`, `random`, `irreg`, and `rgbbox`.
