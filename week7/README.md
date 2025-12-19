@@ -507,7 +507,7 @@ $ make ray
 Then we can run it as follows:
 
 ```
-$ ./ray out.ppm 300 200 50
+$ ./ray out.ppm 300 200 10
 ```
 
 This will produce a 300x200 image with 10 rays per pixel, in the PPM image
