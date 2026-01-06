@@ -2,6 +2,14 @@
 
 # Ray tracing
 
+## Slides
+
+* [Tuesday (network programming)](7a.pdf)
+
+* [Tuesday (data parallel programming)](troels_research.pdf)
+
+## Exercises
+
 The following exercises are intended to familiarise you with [ray
 tracing](https://en.wikipedia.org/wiki/Ray_tracing_(graphics)), which will be
 the computational problem you work within at the HPPS exam. A *ray tracer* is a
