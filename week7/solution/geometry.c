@@ -80,7 +80,7 @@ struct aabb aabb_enclosing(const struct aabb *box0, const struct aabb *box1) {
 struct vec aabb_centre(const struct aabb *a) {
   return (struct vec){a->min.x + (a->max.x - a->min.x)/2,
                       a->min.y + (a->max.y - a->min.y)/2,
-                      a->min.z + (a->max.z - a->min.z)}/2;
+                      a->min.z + (a->max.z - a->min.z)/2};
 }
 
 bool aabb_hit(struct aabb *box, struct ray *r, float tmin, float tmax) {
