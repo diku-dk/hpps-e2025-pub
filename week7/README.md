@@ -418,7 +418,7 @@ double random_double(struct rng *rng);
 Write a test program that uses the random number library to roll 10 six-sided
 dice and reports each roll.
 
-[See solution here](solution.roll_dice.c)
+[See solution here](solution/roll_dice.c)
 
 ## The rest of the owl
 
