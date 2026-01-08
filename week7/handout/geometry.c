@@ -1,35 +1,35 @@
-#include "geometry.h"
 #include <stdlib.h>
 #include <math.h>
+#include <stdbool.h>
+
+#include "geometry.h"
 
 struct vec vec_scale(double t, struct vec v) {
   return (struct vec) { .x = t * v.x,
-                         .y = t * v.y,
-                         .z = t * v.z};
+                        .y = t * v.y,
+                        .z = t * v.z};
 }
-
 
 struct vec vec_neg(struct vec v) {
   return vec_scale(-1, v);
 }
 
-
 struct vec vec_add(struct vec a, struct vec b) {
   return (struct vec) { .x = a.x + b.x,
-                         .y = a.y + b.y,
-                         .z = a.z + b.z};
+                        .y = a.y + b.y,
+                        .z = a.z + b.z};
 }
 
 struct vec vec_mul(struct vec a, struct vec b) {
   return (struct vec) { .x = a.x * b.x,
-                         .y = a.y * b.y,
-                         .z = a.z * b.z};
+                        .y = a.y * b.y,
+                        .z = a.z * b.z};
 }
 
 struct vec vec_sub(struct vec a, struct vec b) {
   return (struct vec) { .x = a.x - b.x,
-                         .y = a.y - b.y,
-                         .z = a.z - b.z};
+                        .y = a.y - b.y,
+                        .z = a.z - b.z};
 }
 
 double vec_dot(struct vec a, struct vec b) {
@@ -38,10 +38,9 @@ double vec_dot(struct vec a, struct vec b) {
 
 struct vec vec_cross(struct vec a, struct vec b) {
   return (struct vec) {.x=a.y*b.z-a.z*b.y,
-                        .y=a.z*b.x-a.x*b.z,
-                        .z=a.x*b.y-a.y*b.x};
+                       .y=a.z*b.x-a.x*b.z,
+                       .z=a.x*b.y-a.y*b.x};
 }
-
 
 double vec_quadrance(struct vec v) {
   return vec_dot(v,v);
@@ -54,21 +53,6 @@ double vec_norm(struct vec v) {
 struct vec vec_normalise(struct vec v) {
   double l = vec_norm(v);
   return vec_scale(1/l, v);
-}
-
-struct vec random_vec() {
-  double x = rand() / (double)RAND_MAX * 2 - 1;
-  double y = rand() / (double)RAND_MAX * 2 - 1;
-  double z = rand() / (double)RAND_MAX * 2 - 1;
-  return (struct vec){.x = x, .y = y, .z = z};
-}
-
-struct vec random_in_unit_sphere() {
-  struct vec v = random_vec();
-  while (vec_quadrance(v) >= 1) {
-    v = random_vec();
-  }
-  return v;
 }
 
 struct vec point_at_parameter(struct ray r, double t) {
@@ -97,4 +81,31 @@ struct vec aabb_centre(const struct aabb *a) {
   return (struct vec){a->min.x + (a->max.x - a->min.x),
                       a->min.y + (a->max.y - a->min.y),
                       a->min.z + (a->max.z - a->min.z)};
+}
+
+bool aabb_hit(struct aabb *box, struct ray *r, float tmin, float tmax) {
+  double min[3] = {box->min.x, box->min.y, box->min.z};
+  double max[3] = {box->max.x, box->max.y, box->max.z};
+  double dir[3] = {r->direction.x, r->direction.y, r->direction.z};
+  double org[3] = {r->origin.x, r->origin.y, r->origin.z};
+  for (int a = 0; a < 3; a++) {
+    double invD = 1 / dir[a];
+    double t0 = (min[a] - org[a]) * invD;
+    double t1 = (max[a] - org[a]) * invD;
+    if (invD < 0) {
+      double tmp = t0;
+      t0 = t1;
+      t1 = tmp;
+    }
+    if (t0 > tmin) {
+      tmin = t0;
+    }
+    if (t1 < tmax) {
+      tmax = t1;
+    }
+    if (tmax <= tmin) {
+      return false;
+    }
+  }
+  return true;
 }

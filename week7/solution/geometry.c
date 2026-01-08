@@ -6,8 +6,8 @@
 
 struct vec vec_scale(double t, struct vec v) {
   return (struct vec) { .x = t * v.x,
-                         .y = t * v.y,
-                         .z = t * v.z};
+                        .y = t * v.y,
+                        .z = t * v.z};
 }
 
 struct vec vec_neg(struct vec v) {
@@ -16,20 +16,20 @@ struct vec vec_neg(struct vec v) {
 
 struct vec vec_add(struct vec a, struct vec b) {
   return (struct vec) { .x = a.x + b.x,
-                         .y = a.y + b.y,
-                         .z = a.z + b.z};
+                        .y = a.y + b.y,
+                        .z = a.z + b.z};
 }
 
 struct vec vec_mul(struct vec a, struct vec b) {
   return (struct vec) { .x = a.x * b.x,
-                         .y = a.y * b.y,
-                         .z = a.z * b.z};
+                        .y = a.y * b.y,
+                        .z = a.z * b.z};
 }
 
 struct vec vec_sub(struct vec a, struct vec b) {
   return (struct vec) { .x = a.x - b.x,
-                         .y = a.y - b.y,
-                         .z = a.z - b.z};
+                        .y = a.y - b.y,
+                        .z = a.z - b.z};
 }
 
 double vec_dot(struct vec a, struct vec b) {
@@ -38,8 +38,8 @@ double vec_dot(struct vec a, struct vec b) {
 
 struct vec vec_cross(struct vec a, struct vec b) {
   return (struct vec) {.x=a.y*b.z-a.z*b.y,
-                        .y=a.z*b.x-a.x*b.z,
-                        .z=a.x*b.y-a.y*b.x};
+                       .y=a.z*b.x-a.x*b.z,
+                       .z=a.x*b.y-a.y*b.x};
 }
 
 double vec_quadrance(struct vec v) {

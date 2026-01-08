@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdbool.h>
+
 // General facilities for geometrical calculations. You do not have to
 // understand how these functions work (i.e., you do not have to read
 // geometry.c), but it can be useful to understand what they do.
@@ -38,13 +40,6 @@ double vec_norm(struct vec v);
 // original vector.
 struct vec vec_normalise(struct vec v);
 
-// Generate a random vector.
-struct vec random_vec();
-
-// Generate a random vector in the unit sphere, meaning it has a length less
-// than 1.
-struct vec random_in_unit_sphere();
-
 // A ray through space is a combination of an origin and a normalised direction
 // (in contrast to plain vectors, which in some sense all originate at (0,0,0)).
 struct ray {
@@ -71,3 +66,6 @@ struct aabb aabb_enclosing(const struct aabb *box0, const struct aabb *box1);
 
 // Find the centre of an AABB.
 struct vec aabb_centre(const struct aabb *a);
+
+// Determine whether a ray intersects an AABB.
+bool aabb_hit(struct aabb *box, struct ray *r, float tmin, float tmax);
