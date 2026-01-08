@@ -8,6 +8,8 @@
 
 * [Tuesday (data parallel programming)](troels_research.pdf)
 
+* [Thursday](final.pdf)
+
 ## Exercises
 
 The following exercises are intended to familiarise you with [ray
